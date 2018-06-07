@@ -1,0 +1,28 @@
+{
+  "extends": "solium:recommended",
+  "plugins": [
+    "security"
+  ],
+  "rules": {
+    "indentation": [
+      "error",
+      4
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "zeppelin/constant-candidates": [
+      "warning"
+    ],
+    "zeppelin/no-state-variable-shadowing": [
+      "warning"
+    ],
+    "zeppelin/no-unchecked-send": [
+      "warning"
+    ],
+    "zeppelin/no-unused-imports": [
+      "warning"
+    ]
+  }
+}

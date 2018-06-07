@@ -1,2 +1,12 @@
-# contract
-Solidity contracts for the ERC220/223 JSE token
+# Prerequisites
+
+## Install Truffle globally
+```
+npm install -g truffle
+```
+
+## Install Solium globally with its dependencies
+```
+npm install -g solium
+npm install -g solium-plugin-zeppelin
+```

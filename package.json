@@ -1,0 +1,37 @@
+{
+  "name": "contracts",
+  "version": "1.0.0",
+  "description": "JSE Token",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/jamesmc/jsecoin.git"
+  },
+  "keywords": [
+    "JSE",
+    "ETH",
+    "Blockchain"
+  ],
+  "author": "JSE",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/jamesmc/jsecoin/issues"
+  },
+  "homepage": "https://gitlab.com/jamesmc/jsecoin#README",
+  "dependencies": {
+    "truffle-privatekey-provider": "^0.1.0",
+    "web3": "^1.0.0-beta.30",
+    "zeppelin-solidity": "^1.5.0"
+  },
+  "devDependencies": {
+    "babel-register": "6.26.0",
+    "solhint": "^1.1.10",
+    "solidity-coverage": "^0.4.9"
+  }
+}
