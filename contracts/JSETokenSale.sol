@@ -15,17 +15,14 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 //    1. Deploy JSEToken contract
 //    2. Deploy JSETokenSale contract
 //    3. Set operationsAddress of JSEToken contract to JSETokenSale contract
-//    4. Set operationsAddress of JSETokenSale contract to some address (Not important)
-//    5. Transfer tokens from owner to JSETokenSale contract
-//    6. Transfer tokens from owner to Distributer Account
-//    7. Initialize JSETokenSale contract
+//    4. Transfer tokens from owner to JSETokenSale contract
+//    5. Transfer tokens from owner to Distributer Account
+//    6. Initialize JSETokenSale contract
 //
 // Pre-sale sequence:
 //    - Set tokensPerKEther
-//    - Set phase1AccountTokensMax
-//    - Add presales
-//    - Add allocations for founders, advisors, etc.
 //    - Update whitelist
+//    - Start public sale
 //
 // After-sale sequence:
 //    1. Finalize the JSETokenSale contract
@@ -35,20 +32,7 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 //    5. Set operationsAddress of JSETrustee contract to some address
 //
 // Anytime
-//    - Add/Remove allocations
-//
-
-//
-// Permissions, according to the ST key management specification.
-//
-//                                Owner    Admin   Operator
-// initialize                       x
-// changeWallet                              x
-// updateWhitelist                           x      x
-// setTokensPerKEther                        x
-// pause / unpause                           x
-// reclaimTokens                             x
-// finalize                                  x
+//    - Update whitelist
 //
 
 contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // Pausable is also Owned
