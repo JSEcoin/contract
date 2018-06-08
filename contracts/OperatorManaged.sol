@@ -16,6 +16,7 @@ contract OperatorManaged is Ownable {
     function OperatorManaged() public
         Ownable()
     {
+		adminAddress=msg.sender;
     }
 
     modifier onlyAdmin() {
