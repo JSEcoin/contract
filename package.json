@@ -25,9 +25,9 @@
   },
   "homepage": "https://gitlab.com/jamesmc/jsecoin#README",
   "dependencies": {
+    "openzeppelin-solidity": "^1.10.0",
     "truffle-privatekey-provider": "^0.1.0",
-    "web3": "^1.0.0-beta.30",
-    "zeppelin-solidity": "^1.5.0"
+    "web3": "^1.0.0-beta2"
   },
   "devDependencies": {
     "babel-register": "6.26.0",

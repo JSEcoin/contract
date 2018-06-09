@@ -1,12 +1,12 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import "./ERC223.sol";
 import "./ERC223ReceivingContract.sol";
 import "./OperatorManaged.sol";
-import "zeppelin-solidity/contracts/token/BurnableToken.sol";
-import "zeppelin-solidity/contracts/token/MintableToken.sol";
-import "zeppelin-solidity/contracts/ownership/Ownable.sol";
-import "zeppelin-solidity/contracts/token/ERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/BurnableToken.sol";
+import "openzeppelin-solidity/contracts/token/ERC20//MintableToken.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 /**
  * @title Main Token Contract for JSE Coin
@@ -27,11 +27,11 @@ contract JSEToken is ERC223, BurnableToken, Ownable, MintableToken, OperatorMana
 
     bool public finalized;
 
-    function JSEToken() OperatorManaged() public {
-        totalSupply = initialSupply;
+    constructor() OperatorManaged() public {
+        totalSupply_ = initialSupply;
         balances[msg.sender] = initialSupply; 
 
-        Transfer(0x0, msg.sender, initialSupply);
+        emit Transfer(0x0, msg.sender, initialSupply);
     }
 
 
@@ -68,7 +68,7 @@ contract JSEToken is ERC223, BurnableToken, Ownable, MintableToken, OperatorMana
     * @param _value The amount to be transferred.
     * @param _data Additional Data sent to the contract.
     */
-    function transfer(address _to, uint _value, bytes _data) public returns (bool) {
+    function transfer(address _to, uint _value, bytes _data) external returns (bool) {
         checkTransferAllowed(msg.sender, _to);
 
         require(_to != address(0));
@@ -81,7 +81,7 @@ contract JSEToken is ERC223, BurnableToken, Ownable, MintableToken, OperatorMana
         ERC223ReceivingContract erc223Contract = ERC223ReceivingContract(_to);
         erc223Contract.tokenFallback(msg.sender, _value, _data);
 
-        Transfer(msg.sender, _to, _value);
+        emit Transfer(msg.sender, _to, _value);
         return true;
     }
 
@@ -107,7 +107,7 @@ contract JSEToken is ERC223, BurnableToken, Ownable, MintableToken, OperatorMana
 
         finalized = true;
 
-        Finalized();
+        emit Finalized();
 
         return true;
     }

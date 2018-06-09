@@ -1,6 +1,6 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
-import "zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 
 // Simple JSE Operator management contract
@@ -13,10 +13,10 @@ contract OperatorManaged is Ownable {
     event OperatorAddressChanged(address indexed _newAddress);
 
 
-    function OperatorManaged() public
+    constructor() public
         Ownable()
     {
-		adminAddress=msg.sender;
+        adminAddress = msg.sender;
     }
 
     modifier onlyAdmin() {
@@ -70,7 +70,7 @@ contract OperatorManaged is Ownable {
 
         adminAddress = _adminAddress;
 
-        AdminAddressChanged(_adminAddress);
+        emit AdminAddressChanged(_adminAddress);
 
         return true;
     }
@@ -84,7 +84,7 @@ contract OperatorManaged is Ownable {
 
         operatorAddress = _operatorAddress;
 
-        OperatorAddressChanged(_operatorAddress);
+        emit OperatorAddressChanged(_operatorAddress);
 
         return true;
     }

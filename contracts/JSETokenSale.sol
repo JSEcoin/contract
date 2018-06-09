@@ -1,10 +1,10 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import "./JSEToken.sol";
 import "./JSECoinCrowdsaleConfig.sol";
 import "./OperatorManaged.sol";
-import "zeppelin-solidity/contracts/lifecycle/Pausable.sol";
-import "zeppelin-solidity/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 
 //
@@ -15,14 +15,17 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 //    1. Deploy JSEToken contract
 //    2. Deploy JSETokenSale contract
 //    3. Set operationsAddress of JSEToken contract to JSETokenSale contract
-//    4. Transfer tokens from owner to JSETokenSale contract
-//    5. Transfer tokens from owner to Distributer Account
-//    6. Initialize JSETokenSale contract
+//    4. Set operationsAddress of JSETokenSale contract to some address (Not important)
+//    5. Transfer tokens from owner to JSETokenSale contract
+//    6. Transfer tokens from owner to Distributer Account
+//    7. Initialize JSETokenSale contract
 //
 // Pre-sale sequence:
 //    - Set tokensPerKEther
+//    - Set phase1AccountTokensMax
+//    - Add presales
+//    - Add allocations for founders, advisors, etc.
 //    - Update whitelist
-//    - Start public sale
 //
 // After-sale sequence:
 //    1. Finalize the JSETokenSale contract
@@ -32,7 +35,20 @@ import "zeppelin-solidity/contracts/math/SafeMath.sol";
 //    5. Set operationsAddress of JSETrustee contract to some address
 //
 // Anytime
-//    - Update whitelist
+//    - Add/Remove allocations
+//
+
+//
+// Permissions, according to the ST key management specification.
+//
+//                                Owner    Admin   Operator
+// initialize                       x
+// changeWallet                              x
+// updateWhitelist                           x      x
+// setTokensPerKEther                        x
+// pause / unpause                           x
+// reclaimTokens                             x
+// finalize                                  x
 //
 
 contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // Pausable is also Owned
@@ -92,7 +108,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
     event Finalized();
 
 
-    function JSETokenSale(JSEToken _tokenContract, address _wallet) public
+    constructor(JSEToken _tokenContract, address _wallet) public
         OperatorManaged()
     {
         require(address(_tokenContract) != address(0));
@@ -121,7 +137,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
         uint256 ownBalance = tokenContract.balanceOf(address(this));
         require(ownBalance == TOKENS_SALE);
 
-        Initialized();
+        emit Initialized();
 
         return true;
     }
@@ -136,7 +152,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
 
         wallet = _wallet;
 
-        WalletChanged(wallet);
+        emit WalletChanged(wallet);
 
         return true;
     }
@@ -193,7 +209,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
 
         whitelist[_account] = true;
 
-        WhitelistUpdated(_account);
+        emit WhitelistUpdated(_account);
 
         return true;
     }
@@ -208,7 +224,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
 
         tokensPerKEther = _tokensPerKEther;
 
-        TokensPerKEtherUpdated(_tokensPerKEther);
+        emit TokensPerKEtherUpdated(_tokensPerKEther);
 
         return true;
     }
@@ -265,7 +281,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
         // Transfer the contribution to the wallet
         wallet.transfer(msg.value.sub(refund));
 
-        TokensPurchased(msg.sender, cost, tokensBought, totalTokensSold);
+        emit TokensPurchased(msg.sender, cost, tokensBought, totalTokensSold);
 
         // If all tokens available for sale have been sold out, finalize the sale automatically.
         if (totalTokensSold == TOKENS_SALE) {
@@ -290,7 +306,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
 
         require(tokenContract.transfer(tokenOwner, _amount));
 
-        TokensReclaimed(_amount);
+        emit TokensReclaimed(_amount);
 
         return true;
     }
@@ -298,7 +314,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
     function changeBonusIncreasePercentage(uint256 _newPercentage) external onlyDuringSale onlyAdmin returns (bool) {
         uint oldPercentage = bonusIncreasePercentage;
         bonusIncreasePercentage = _newPercentage;
-        BonusIncreasePercentageChanged(oldPercentage, _newPercentage);
+        emit BonusIncreasePercentageChanged(oldPercentage, _newPercentage);
         return true;
     }
 
@@ -323,7 +339,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
 
         finalized = true;
 
-        Finalized();
+        emit Finalized();
 
         return true;
     }
