@@ -231,7 +231,13 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
 
         require(tokensMax > 0);
 
-        uint256 tokensBought = msg.value.mul(tokensPerKEther).mul(bonusIncreasePercentage).div(PURCHASE_DIVIDER).div(100);
+        
+        uint256 actualAmount = msg.value.mul(tokensPerKEther).div(PURCHASE_DIVIDER);
+
+        uint256 bonusAmount = actualAmount.mul(bonusIncreasePercentage).div(100);
+
+        uint256 tokensBought = actualAmount.add(bonusAmount);
+
         require(tokensBought > 0);
 
         uint256 cost = msg.value;
