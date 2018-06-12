@@ -72,6 +72,8 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
     // Map of addresses that have been whitelisted in advance (and passed KYC).
     mapping(address => bool) public whitelist;
 
+    // Amount of wei raised
+    uint256 public weiRaised;
 
     //
     // EVENTS
@@ -230,7 +232,6 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
         uint256 tokensMax = TOKENS_SALE.sub(totalTokensSold);
 
         require(tokensMax > 0);
-
         
         uint256 actualAmount = msg.value.mul(tokensPerKEther).div(PURCHASE_DIVIDER);
 
@@ -263,6 +264,9 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
         if (refund > 0) {
             msg.sender.transfer(refund);
         }
+
+        // update state
+        weiRaised = weiRaised.add(msg.value.sub(refund));
 
         // Transfer the contribution to the wallet
         wallet.transfer(msg.value.sub(refund));

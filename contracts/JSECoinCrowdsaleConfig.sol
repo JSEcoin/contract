@@ -16,7 +16,8 @@ contract JSECoinCrowdsaleConfig {
 
 
     // For the public sale, tokens are priced at 0.006 USD/token.
-    // So if we have 630 USD/ETH -> 630,000 USD/KETH / 0.006 USD/token = ~105,000,000
+    // So if we have 630 USD/ETH -> 630,000 USD/KETH / 0.006 USD/token = ~105000000
+                                                                    //    3600000
     uint256 public constant TOKENS_PER_KETHER                       = 105000000;
 
     // Constant used by buyTokens as part of the cost <-> tokens conversion.
