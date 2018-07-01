@@ -223,7 +223,7 @@ contract JSETokenSale is OperatorManaged, Pausable, JSECoinCrowdsaleConfig { // 
         require(msg.value <= CONTRIBUTION_MAX);
         require(totalTokensSold < TOKENS_SALE);
 
-        // All accounts need to be whitelisted to purchase.
+        // All accounts need to be whitelisted to purchase if the value above the CONTRIBUTION_MAX_NO_WHITELIST
         bool whitelisted = whitelist[msg.sender];
         if(msg.value >= CONTRIBUTION_MAX_NO_WHITELIST){
             require(whitelisted);
