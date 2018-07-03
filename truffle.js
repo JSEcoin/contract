@@ -18,5 +18,13 @@ module.exports = {
       gas: 4700000,
       network_id: 4
     },
+    mainnet: {
+      provider() {
+        return new PrivateKeyProvider(process.env.OWNER_PRIVATE_KEY, "https://mainnet.infura.io/Kjwf2yLH4uUKcXrKJLxv")
+      },
+      gas: 4700000,
+      gasPrice: 2000000000, //2Gwei
+      network_id: 1
+    },
   }
 };
